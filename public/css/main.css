@@ -1,0 +1,43 @@
+.navbar {
+  background-color: #5cb85c; /* #007bff, #00cc00 */
+  box-shadow: 0 0 .5em rgba(0, 0, 0, .2);
+  z-index: 500;
+}
+
+.navbar a {
+  color: white;
+}
+
+.navbar a:hover {
+  color: rgba(255, 255, 255, .75);
+}
+
+.nav-item {
+  padding-right: 10px;
+}
+
+.nav-item:nth-child(n+2) a::before {
+  content: ' | ';
+  color: white;
+}
+
+.nav-item:last-child {
+  padding-right: 0;
+}
+
+.kana {
+  font-size: 1.25em;
+}
+
+.body-div {
+  padding-top: 1em;
+}
+
+.jumbotron {
+  text-align: center;
+}
+
+.add-space {
+  margin-left: .25em;
+  margin-right: .25em;
+}

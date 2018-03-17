@@ -1,0 +1,15 @@
+extends layout.pug
+
+block content
+
+  //- card
+  .jumbotron.card
+    p Translate the following:
+    h1.display-4.japanese-phrase!= cardPrompt.japanesePhrase
+    h3.english-translation= cardPrompt.englishTranslation
+    p.answer
+
+  p.edit-card-button(data-database-id= cardPrompt._id)
+  p.delete-card-button(data-database-id= cardPrompt._id)
+  br
+  br

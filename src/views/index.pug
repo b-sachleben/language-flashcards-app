@@ -1,0 +1,24 @@
+extends layout.pug
+
+block content
+  .row
+    .col-md-12
+      p.add-card-button
+      br
+      br
+      h3 Flashcard List
+      table.table.table-striped
+        thead
+          th(scope='col')
+            | Number
+          th(scope='col')
+            | Japanese
+          th(scope='col')
+            | English
+        tbody
+          each prompt, index in cardPrompts
+            tr
+              th(scope='row')= index + 1
+              td.kana!= prompt.japanesePhrase
+              td= prompt.englishTranslation
+              td.details-button(data-database-id= prompt._id)

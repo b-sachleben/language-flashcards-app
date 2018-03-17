@@ -1,0 +1,11 @@
+extends layout.pug
+
+block content
+  form(action='/add' method='post')
+    .form-group
+      label(for='japanesePhrase') Japanese Phrase:
+      input#japanesePhrase.form-control.form-control-lg(type='text' name='japanesePhrase')
+      label(for='englishTranslation') English Translation:
+      input#englishTranslation.form-control.form-control-lg(type='text' name='englishTranslation')
+      br
+      button.btn.btn-primary(type='submit') Add Flashcard

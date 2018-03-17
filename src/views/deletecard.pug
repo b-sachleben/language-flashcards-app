@@ -1,0 +1,15 @@
+extends layout.pug
+
+block content
+  form
+    .form-group
+      p Japanese Phrase:
+      p= cardPrompt.japanesePhrase
+      p English Translation:
+      p= cardPrompt.englishTranslation
+      br
+      p Delete this flashcard?
+      button.btn.btn-danger(type='submit') Delete
+      button.btn.btn-primary(type='button') Cancel
+
+//- not sure yet if this is needed
