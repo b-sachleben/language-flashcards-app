@@ -9,41 +9,61 @@ const mongoose = require('mongoose');
 module.exports = router;
 
 /*
+  REUSEABLE FUNCTIONS
+*/
+
+function checkForError(err) {
+  if (err) {
+    console.log(err);
+    return res.status(500).json(err);
+  }
+}
+
+function checkIfCardExists(card) {
+  if (!card) {
+    return res.status(404).json({message: "File not found"});
+  }
+}
+
+/*
   LIST
 */
+
+// render root path for site
 router.get('/', function(req, res){  
-  CardPrompt.find({deleted: {$ne: true}}, function(err, prompts){
-    if (err) {
-      console.log(err);
-      return res.status(500).json(err);
-    }
-    res.render('index', { title: 'Prompt List', cardPrompts: prompts });
+  CardPrompt.find({deleted: {$ne: true}}, function(err, cards){
+    checkForError(err);
+    res.render('index', { title: 'Prompt List', cardPrompts: cards });
   });
   
+});
+
+// just return cards as JSON data
+router.get('/load-cards', ( req, res ) => {
+  CardPrompt.find({deleted: {$ne: true}}, (err, cards) => {
+    checkForError(err);
+    res.json(cards);
+  });
 });
 
 /*
   CREATE
 */
 
+// GET path for addcard
 router.get('/add', function(req, res){
   res.render('addcard', { title: 'Add Prompt' });
 });
 
+//POST path for addcard
 router.post('/add', function(req, res){
-  console.log(req.body);
   const cardData = {
     "japanesePhrase": `${req.body.japanesePhrase}`,
     "englishTranslation": `${req.body.englishTranslation}`
   };
 
   CardPrompt.create(cardData, function(err, cardData) {
-    if (err) {
-      console.log(err);
-      return res.status(500).json(err);
-    }
-    console.log(cardData);
-    // res.json(cardData);
+    checkForError(err);
     res.redirect('/');
   });
 });
@@ -52,13 +72,12 @@ router.post('/add', function(req, res){
   READ
 */
 
+// GET details of one card
 router.get('/cards/:cardId', function(req, res){
-  CardPrompt.findOne({ _id: `${req.params.cardId}` }, function(err, prompt){
-    if (err) {
-      console.log(err);
-      return res.status(500).json(err);
-    }
-    res.render('card', { title: 'Prompt List', cardPrompt: prompt });
+  CardPrompt.findOne({ _id: `${req.params.cardId}` }, function(err, card){
+    checkForError(err);
+    checkIfCardExists(card);
+    res.render('card', { title: 'Prompt List', cardPrompt: card });
   });
 
 });
@@ -67,36 +86,28 @@ router.get('/cards/:cardId', function(req, res){
   UPDATE
 */
 
+// GET path to editcard form
 router.get('/editcard/:cardId', function(req, res){
   const id = req.params.cardId
-  CardPrompt.findOne({ _id: `${id}` }, function(err, prompt){
-    if (err) {
-      console.log(err);
-      return res.status(500).json(err);
-    }
-    res.render('editcard', { title: 'Prompt List', cardPrompt: prompt, cardId: prompt._id });
+  CardPrompt.findOne({ _id: `${id}` }, function(err, card){
+    checkForError(err);
+    checkIfCardExists(card);
+    res.render('editcard', { title: 'Prompt List', cardPrompt: card, cardId: card._id });
   });
 });
 
+// PUT path to update card from form data
 router.put('/editcard/:cardId', function(req, res){
   const id = req.params.cardId
   CardPrompt.findOne({ _id: `${id}` }, function(err, card){
-    if (err) {
-      console.error(err);
-      return res.status(500).json(err);
-    }
-    if (!card) {
-      return res.status(404).json({message: "File not found"});
-    }
+    checkForError(err);
+    checkIfCardExists(card);
 
     card.japanesePhrase = req.body.japanesePhrase;
     card.englishTranslation = req.body.englishTranslation;
   
     card.save(function(err, savedCard) {
-      if (err) {
-        console.error(err);
-        return res.status(500).json(err);
-      }
+      checkForError(err);
       res.json(savedCard);
     });
   });
@@ -106,17 +117,13 @@ router.put('/editcard/:cardId', function(req, res){
   DELETE
 */
 
+// DELETE path to soft delete one card
 router.delete('/cards/:cardId', function(req, res){
   const cardId = req.params.cardId;
 
   CardPrompt.findById(cardId, function(err, card) {
-    if (err) {
-      console.log(err);
-      return res.status(500).json(err);
-    }
-    if (!card) {
-      return res.status(404).json({message: "File not found"});
-    }
+    checkForError(err);
+    checkIfCardExists(card);
 
     card.deleted = true;
 
@@ -125,3 +132,14 @@ router.delete('/cards/:cardId', function(req, res){
     })
   })
 });
+
+// greeting to begin card prompts
+router.get('/greeting', function(req, res){
+  res.render('greeting');
+});
+
+// return random card - unfinished
+router.get( '/cards', ( req, res ) => {
+  res.render( 'randomcard' )
+});
+

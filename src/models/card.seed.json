@@ -180,7 +180,15 @@
     "englishTranslation": "wo"
   },
   {
-    "japanesePhrase": "&#x3093;",
-    "englishTranslation": "n"
+    "japanesePhrase": "こんにちは",
+    "englishTranslation": "hello/good day (pronounced: konnichiwa)"
+  },
+  {
+    "japanesePhrase": "こんばんは",
+    "englishTranslation": "good evening (pronounced: kombanwa)"
+  },
+  {
+    "japanesePhrase": "今",
+    "englishTranslation": "today (pronounced: ima)"
   }
 ]

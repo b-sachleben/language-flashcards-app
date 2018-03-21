@@ -10,5 +10,4 @@ block content
       input#englishTranslation.form-control.form-control-lg(type='text' name='englishTranslation' value= cardPrompt.englishTranslation)
       br
       p.save-changes-button(data-database-id= cardPrompt._id)
-      //- button.btn.btn-primary(type='submit') Save Changes
-      button.btn.btn-primary(type='button') Cancel
+      p.cancel-button(data-database-id= cardPrompt._id)

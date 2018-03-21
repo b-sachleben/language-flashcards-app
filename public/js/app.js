@@ -2,6 +2,8 @@
 //  reuseable code
 // ------------------------
 
+let cardData;
+
 function initializeButton(buttonText, buttonClasses = [], buttonType) {
   const button = document.createElement('BUTTON');
   button.textContent = buttonText;
@@ -12,9 +14,43 @@ function initializeButton(buttonText, buttonClasses = [], buttonType) {
   return button;
 }
 
+function loadCards() {
+  // 1. get database data as json data from /load-cards route
+  const triggerRandom = document.querySelector('#trigger-random');
+  let method, url;
+      method = 'GET';
+      url = '/load-cards';
+  
+  $.ajax({
+    type: method,
+    url: url,
+    dataType: 'json',
+    contentType : 'application/json'
+  })
+    .done(function(response) {
+      console.log("Cards loaded successfully");
+      cardData = response;
+      console.log(cardData);
+      // if site visitor navigated via url:
+      if(triggerRandom) {
+        const flashcardId = randomCard(cardData);
+        window.location.href = `/cards/${flashcardId}`;
+      }
+    })
+    .fail(function(error) {
+      console.log("Failed to load cards", error);
+    })
+}
+
 //  redirect to a random card by cardId - unfinished function
-function randomCard() {
+function randomCard(data) {
   console.log('randomize card');
+  // 2. return random number and feed to /cards route
+  const numberOfCards = data.length;
+  const flashcardIndex = Math.floor( Math.random() * numberOfCards );
+  console.log(flashcardIndex);
+  const flashcardId = data[flashcardIndex]._id;
+  return flashcardId;
 }
 
 // ------------------------
@@ -170,3 +206,36 @@ document.addEventListener('DOMContentLoaded', (e) => {
     })
   }
 })
+
+//  Cancel button: card.pug
+document.addEventListener('DOMContentLoaded', (e) => {
+  const cancel = document.querySelector('.cancel-button');
+  const cardId = cancel.getAttribute('data-database-id').toString();
+  if (cancel) {
+    const cancelButton = initializeButton('Cancel', ['btn', 'btn-primary'], 'button');
+    cancel.parentNode.insertBefore(cancelButton, cancel);
+    cancel.style.display = 'none';
+
+    cancelButton.addEventListener('click', (e) => {
+      window.location.href = `/cards/${cardId}`;
+    })
+  }
+})
+
+//  Begin Quiz button: greeting.pug
+document.addEventListener('DOMContentLoaded', (e) => {
+  const beginQuiz = document.querySelector('.begin-quiz-button');
+  if (beginQuiz) {
+    const beginQuizButton = initializeButton('Begin Quiz', ['btn', 'btn-outline-success', 'btn-lg'], 'button');
+    beginQuiz.parentNode.insertBefore(beginQuizButton, beginQuiz);
+    beginQuiz.style.display = 'none';    
+    loadCards();
+
+    beginQuizButton.addEventListener('click', (e) => {
+      let flashcardId = randomCard(cardData);
+      window.location.href = `/cards/${flashcardId}`;
+    })
+  }
+})
+
+// to do: implement a 'next' button for quiz

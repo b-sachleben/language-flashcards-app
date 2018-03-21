@@ -1,0 +1,9 @@
+//- card to be loaded to return a random card if navigated to through url instead of 'begin quiz' button
+
+//- site specific javascript files: loads functions needed
+script(src='/static/js/app.js')
+//- jquery
+script(src='https://code.jquery.com/jquery-3.3.1.min.js', integrity='sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=', crossorigin='anonymous')
+
+body(onload='loadCards()')
+    #trigger-random
