@@ -1,11 +1,13 @@
-header.navbar
-  a.navbar-brand(href='/api')
-    h1.display-4 Learn Japanese!
-    h6 A flashcard app to help you study
-  nav.navbar-nav.flex-row.site-nav
-    //- li.nav-item.active
-    //-   a.nav-link(href='/add') Add
-    li.nav-item
-      a.nav-link(href='/') List All Cards
-    li.nav-item
-      a.nav-link(href='/greeting') Begin Quiz
+header
+  nav.navbar.navbar-expand-md.navbar-dark
+    a.navbar-brand(href='/')
+      h1.display-4 Learn Japanese!
+      h6 A flashcard app to help you study
+    button.navbar-toggler(type="button" data-toggle="collapse" data-target="#collapsing-menu" aria-controls="collapsing-menu" aria-expanded="false" aria-label="Toggle navigation")
+      span.navbar-toggler-icon
+    #collapsing-menu.collapse.navbar-collapse
+      ul.navbar-nav
+        li.nav-item
+          a.nav-link(href='/') List All Cards
+        li.nav-item
+          a.nav-link(href='/greeting') Begin Quiz

@@ -7,8 +7,9 @@ const routes = require('./routes');
 // Load mongoose package
 const mongoose = require('mongoose');
 
+// to do: connect to mLab database
 // Connect to MongoDB
-mongoose.connection.openUri('mongodb://localhost/flashcards');
+mongoose.connection.openUri(`mongodb://${config.db.username}:${config.db.password}@${config.db.host}/${config.db.dbName}`);
 
 // Import all models
 require('./models/card.model.js')

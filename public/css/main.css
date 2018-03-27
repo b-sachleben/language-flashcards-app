@@ -16,17 +16,13 @@
   padding-right: 10px;
 }
 
-.nav-item:nth-child(n+2) a::before {
-  content: ' | ';
-  color: white;
-}
-
 .nav-item:last-child {
   padding-right: 0;
 }
 
 .kana {
   font-size: 1.25em;
+  font-family:"ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro",Osaka, "メイリオ", Meiryo, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
 }
 
 .body-div {
@@ -40,4 +36,21 @@
 .add-space {
   margin-left: .25em;
   margin-right: .25em;
+}
+
+.navbar-dark {
+  color: white;
+}
+
+@media (min-width: 768px) {
+
+  .nav-item:nth-child(n+2) a::before {
+    content: ' | ';
+    color: white;
+  }
+
+}
+
+@media (min-width: 576px) {
+  
 }

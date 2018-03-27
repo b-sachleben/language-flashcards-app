@@ -95,7 +95,7 @@ document.addEventListener('DOMContentLoaded', (e) => {
   const editCard = document.querySelector('.edit-card-button');
   const cardId = editCard.getAttribute('data-database-id').toString();
   if (editCard) {
-    const editCardButton = initializeButton('Edit Card', ['btn', 'btn-info', '.btn-sm', 'add-space'], 'button');
+    const editCardButton = initializeButton('Edit Card', ['btn', 'btn-info', 'btn-sm', 'add-space'], 'button');
     editCard.parentNode.insertBefore(editCardButton, editCard);
     editCard.style.display = 'none';    
 
@@ -114,7 +114,7 @@ document.addEventListener('DOMContentLoaded', (e) => {
   const deleteCard = document.querySelector('.delete-card-button');
   const cardId = deleteCard.getAttribute('data-database-id').toString();
   if (deleteCard) {
-    const deleteCardButton = initializeButton('Delete Card', ['btn', 'btn-danger', '.btn-sm', 'add-space'], 'button');
+    const deleteCardButton = initializeButton('Delete Card', ['btn', 'btn-danger', 'btn-sm', 'add-space'], 'button');
     deleteCard.parentNode.insertBefore(deleteCardButton, deleteCard);
     deleteCard.style.display = 'none';    
 
@@ -166,12 +166,26 @@ document.addEventListener('DOMContentLoaded', (e) => {
   }
 })
 
+//  Next button: card.pug
+document.addEventListener('DOMContentLoaded', (e) => {
+  const next = document.querySelector('.next-button');
+  if (next) {
+    const nextButton = initializeButton('Next Card', ['btn', 'btn-success', 'btn-sm', 'float-right'], 'button');
+    next.parentNode.insertBefore(nextButton, next);
+    next.style.display = 'none';
+
+    nextButton.addEventListener('click', (e) => {
+      window.location.href = `/cards`;
+    })
+  }
+})
+
 //  Save Changes button: editcard.pug
 document.addEventListener('DOMContentLoaded', (e) => {
   const saveChanges = document.querySelector('.save-changes-button');
   const cardId = saveChanges.getAttribute('data-database-id').toString();
   if (saveChanges) {
-    const saveChangesButton = initializeButton('Save Changes', ['btn', 'btn-info', '.btn-sm', 'add-space'], 'button');
+    const saveChangesButton = initializeButton('Save Changes', ['btn', 'btn-outline-success', 'btn-sm', 'add-space'], 'button');
     saveChanges.parentNode.insertBefore(saveChangesButton, saveChanges);
     saveChanges.style.display = 'none';    
 
@@ -212,7 +226,7 @@ document.addEventListener('DOMContentLoaded', (e) => {
   const cancel = document.querySelector('.cancel-button');
   const cardId = cancel.getAttribute('data-database-id').toString();
   if (cancel) {
-    const cancelButton = initializeButton('Cancel', ['btn', 'btn-primary'], 'button');
+    const cancelButton = initializeButton('Cancel', ['btn', 'btn-success', 'btn-sm'], 'button');
     cancel.parentNode.insertBefore(cancelButton, cancel);
     cancel.style.display = 'none';
 
