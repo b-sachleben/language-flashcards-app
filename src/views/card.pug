@@ -9,8 +9,10 @@ block content
     h3.english-translation= cardPrompt.englishTranslation
     p.answer
 
-  p.edit-card-button(data-database-id= cardPrompt._id)
-  p.delete-card-button(data-database-id= cardPrompt._id)
-  p.next-button
+  if mode.admin
+    p.edit-card-button(data-database-id= cardPrompt._id)
+    p.delete-card-button(data-database-id= cardPrompt._id)
+  else
+    p.next-button
   br
   br

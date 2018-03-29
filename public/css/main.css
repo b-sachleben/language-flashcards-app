@@ -12,12 +12,21 @@
   color: rgba(255, 255, 255, .75);
 }
 
-.nav-item {
+/* .nav-item {
   padding-right: 10px;
 }
 
 .nav-item:last-child {
   padding-right: 0;
+} */
+
+.nav-item a {
+  padding-right: 0 !important;
+  padding-left: 0 !important;
+}
+
+.nav-item:last-child a {
+  padding-right: .5rem !important;
 }
 
 .kana {
@@ -42,15 +51,28 @@
   color: white;
 }
 
+.navbar-collapse {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+}
+
+.card-list {
+  text-align: center;
+}
+
 @media (min-width: 768px) {
 
   .nav-item:nth-child(n+2) a::before {
     content: ' | ';
     color: white;
+    padding-left: 1em;
+    padding-right: 1em;
   }
 
 }
 
-@media (min-width: 576px) {
-  
+@media (max-width: 576px) {
+  .display-4 {
+    font-size: 2.5rem;
+  }
 }

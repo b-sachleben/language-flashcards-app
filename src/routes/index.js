@@ -72,12 +72,22 @@ router.post('/add', function(req, res){
   READ
 */
 
-// GET details of one card
+// GET details of one card when adding/removing/editing cards
 router.get('/cards/:cardId', function(req, res){
   CardPrompt.findOne({ _id: `${req.params.cardId}` }, function(err, card){
     checkForError(err);
     checkIfCardExists(card);
-    res.render('card', { title: 'Prompt List', cardPrompt: card });
+    res.render('card', { title: 'Prompt List', mode: { admin: true }, cardPrompt: card });
+  });
+
+});
+
+// GET details of card when taking quiz
+router.get('/quiz/:cardId', function(req, res){
+  CardPrompt.findOne({ _id: `${req.params.cardId}` }, function(err, card){
+    checkForError(err);
+    checkIfCardExists(card);
+    res.render('card', { title: 'Prompt List', mode: { admin: false }, cardPrompt: card });
   });
 
 });
@@ -138,8 +148,13 @@ router.get('/greeting', function(req, res){
   res.render('greeting');
 });
 
-// return random card - unfinished
+// return random card
 router.get( '/cards', ( req, res ) => {
-  res.render( 'randomcard' )
+  res.render('randomcard')
+});
+
+// return random card
+router.get( '/quiz', ( req, res ) => {
+  res.render('randomcard')
 });
 
