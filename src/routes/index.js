@@ -31,9 +31,19 @@ function checkIfCardExists(card) {
 
 // render root path for site
 router.get('/', function(req, res){  
-  CardPrompt.find({deleted: {$ne: true}}, function(err, cards){
-    checkForError(err);
-    res.render('index', { title: 'Prompt List', cardPrompts: cards });
+  CardPrompt.find({deleted: {$ne: true}})
+            .limit(10)
+            .exec((err, cards) => {
+              checkForError(err);
+              CardPrompt.count({deleted: {$ne: true}}).exec(function(err, count) {
+                checkForError(err);
+                res.render('index', { 
+                  title: 'Card List', 
+                  cardPrompts: cards, 
+                  current: 1,
+                  totalPages: Math.ceil(count / 10)
+                });
+              });
   });
   
 });
@@ -44,6 +54,28 @@ router.get('/load-cards', ( req, res ) => {
     checkForError(err);
     res.json(cards);
   });
+});
+
+// paginate results
+router.get('/load-cards/:numPerPage/:pageNum', ( req, res ) => {
+  const numPerPage = parseInt(req.params.numPerPage);
+  const pageNum = parseInt(req.params.pageNum);
+  const skipValue = numPerPage * (pageNum - 1);
+  CardPrompt.find({deleted: {$ne: true}})
+            .skip(skipValue)
+            .limit(numPerPage)
+            .exec((err, cards) => {
+              checkForError(err);
+              CardPrompt.count({deleted: {$ne: true}}).exec(function(err, count) {
+                checkForError(err);
+                // console.log(cards);
+                res.json({
+                  cardPrompts: cards,
+                  current: pageNum,
+                  totalPages: Math.ceil(count / numPerPage)
+                });
+              });
+            });
 });
 
 /*

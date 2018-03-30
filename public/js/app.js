@@ -1,8 +1,12 @@
-// ------------------------
+// ________________________
+//
 //  reuseable code
-// ------------------------
+//
+// ________________________
 
 let cardData;
+let totalPages;
+let currentPage = 1;
 
 function initializeButton(buttonText, buttonClasses = [], buttonType) {
   const button = document.createElement('BUTTON');
@@ -16,7 +20,12 @@ function initializeButton(buttonText, buttonClasses = [], buttonType) {
 
 function insertButton(location, button) {
   location.parentNode.insertBefore(button, location);
-  location.style.display = 'none';  
+  location.style.display = 'none';
+}
+
+function insertIntoAndReplace(location, button) {
+  location.parentNode.appendChild(button);
+  location.parentNode.removeChild(location);
 }
 
 function loadCards() {
@@ -58,9 +67,77 @@ function randomCard(data) {
   return flashcardId;
 }
 
-// ------------------------
+// Pagination Logic
+// ----------------------
+
+function loadNewPage(pageToLoad = 1, numberPerPage = 10) {
+  // console.log(pageToLoad);
+  // console.log(numberPerPage);
+
+  let method, url;
+      method = 'GET';
+      url = `/load-cards/${numberPerPage}/${pageToLoad}`;
+  
+  $.ajax({
+    type: method,
+    url: url,
+    dataType: 'json',
+    contentType : 'application/json'
+  })
+    .done(function(response) {
+      console.log("Cards loaded successfully");
+      cardData = response.cardPrompts;
+      currentPage = response.current;
+      totalPages = response.totalPages;
+      refreshList(cardData, numberPerPage);
+      // console.log(cardData);
+    })
+    .fail(function(error) {
+      console.log("Failed to load cards", error);
+    })
+}
+
+function refreshList(cardData, numberPerPage) {
+  const data = document.querySelector('#data');
+  data.textContent = '';
+
+  cardData.forEach(function(index, i){
+
+    const tableRow = document.createElement('tr');
+    const rowNumber = document.createElement('th');
+    const japanesePhraseCell = document.createElement('td');
+    const englishTranslationCell = document.createElement('td');
+    const detailsButtonCell = document.createElement('td');
+    const detailsButton = initializeButton('Details', ['btn', 'btn-outline-secondary', 'btn-sm'], 'button');
+
+    rowNumber.setAttribute('scope', 'row');
+    rowNumber.textContent = (i + 1) + (numberPerPage * (currentPage - 1));
+    japanesePhraseCell.classList.add('kana');
+    $(japanesePhraseCell).html(index.japanesePhrase);
+    englishTranslationCell.textContent = index.englishTranslation;
+    detailsButtonCell.appendChild(detailsButton);
+
+    data.appendChild(tableRow);
+    tableRow.appendChild(rowNumber);
+    tableRow.appendChild(japanesePhraseCell);
+    tableRow.appendChild(englishTranslationCell);
+    tableRow.appendChild(detailsButtonCell);
+
+    detailsButton.addEventListener('click', (e) => {
+      console.log(`details button ${i} pressed`);
+      window.location.href = `/cards/${index._id}`;
+    })
+  });
+}
+
+// End Pagination Logic
+// ----------------------
+
+// ________________________
+//
 //  event handlers: buttons
-// ------------------------
+//
+// ________________________
 
 //  Details button: index.pug
 document.addEventListener('DOMContentLoaded', (e) => {
@@ -92,6 +169,107 @@ document.addEventListener('DOMContentLoaded', (e) => {
     })
   }
 })
+
+// Pagination Logic
+// ----------------------
+
+//  First Page button: index.pug
+document.addEventListener('DOMContentLoaded', (e) => {
+  const firstPage = document.querySelector('.first-page-button');
+  // if (currentPage !== 1) {
+    if (firstPage) {
+      const firstPageButton = initializeButton('«', ['btn', 'btn-outline-secondary', 'btn-sm'], 'button');
+      insertIntoAndReplace(firstPage, firstPageButton);
+
+      firstPageButton.addEventListener('click', (e) => {
+        console.log('first page button pressed');
+        console.log(currentPage);
+        // window.location.href = '';
+        loadNewPage();
+      })
+    }
+  // } else {
+  //   firstPage.parentNode.removeChild(firstPage);
+  // }
+})
+
+//  Prev Page button: index.pug
+document.addEventListener('DOMContentLoaded', (e) => {
+  const prevPage = document.querySelector('.prev-page-button');
+  // if (currentPage !== 1) {
+    if (prevPage) {
+      const prevPageButton = initializeButton('<', ['btn', 'btn-outline-secondary', 'btn-sm'], 'button');
+      insertIntoAndReplace(prevPage, prevPageButton);
+  
+      prevPageButton.addEventListener('click', (e) => {
+        console.log('prev page button pressed');
+        console.log(currentPage);
+        // window.location.href = '';
+        loadNewPage(currentPage - 1);
+      })
+    }
+  // } else {
+  //   prevPage.parentNode.removeChild(prevPage);
+  // }
+})
+
+//  Page Number button: index.pug
+document.addEventListener('DOMContentLoaded', (e) => {
+  const pageNumbers = document.querySelectorAll('.page-number-button');
+  if (pageNumbers) {
+    pageNumbers.forEach(function(index, i){
+      const pageNumberButton = initializeButton(`${ i + 1 }`, ['btn', 'btn-outline-secondary', 'btn-sm'], 'button');
+      insertIntoAndReplace(index, pageNumberButton);
+  
+      pageNumberButton.addEventListener('click', (e) => {
+        console.log(`page ${ i + 1 } button pressed`);
+        console.log(currentPage);
+        // window.location.href = '';
+        loadNewPage(i + 1);
+      })
+    });
+  }
+})
+
+//  Next Page button: index.pug
+document.addEventListener('DOMContentLoaded', (e) => {
+  if (currentPage !== totalPages) {
+    const nextPage = document.querySelector('.next-page-button');
+    if (nextPage) {
+      const nextPageButton = initializeButton('>', ['btn', 'btn-outline-secondary', 'btn-sm'], 'button');
+      insertIntoAndReplace(nextPage, nextPageButton);
+  
+      nextPageButton.addEventListener('click', (e) => {
+        console.log('next page button pressed');
+        console.log(currentPage);
+        // window.location.href = '';
+        loadNewPage(currentPage + 1);
+      })
+    }
+  }
+})
+
+//  Last Page button: index.pug
+document.addEventListener('DOMContentLoaded', (e) => {
+  if (currentPage !== totalPages) {
+    const lastPage = document.querySelector('.last-page-button');
+    if (lastPage) {
+      const lastPageButton = initializeButton('»', ['btn', 'btn-outline-secondary', 'btn-sm'], 'button');
+      insertIntoAndReplace(lastPage, lastPageButton);
+  
+      lastPageButton.addEventListener('click', (e) => {
+        console.log('last page button pressed');
+        console.log(currentPage);
+        // window.location.href = '';
+        console.log(totalPages);
+        loadNewPage(totalPages);
+      })
+    }
+  }
+})
+
+// End Pagination Logic
+// ----------------------
 
 //  Edit Card button: card.pug
 document.addEventListener('DOMContentLoaded', (e) => {

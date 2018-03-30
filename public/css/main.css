@@ -36,6 +36,7 @@
 
 .body-div {
   padding-top: 1em;
+  padding-bottom: 1em;
 }
 
 .jumbotron {
@@ -58,6 +59,17 @@
 
 .card-list {
   text-align: center;
+}
+
+.page-select {
+  text-align: center;
+  width: 100%;
+  justify-content: center;
+}
+
+.page-select a {
+  padding-left: 1em;
+  padding-right: 1em;
 }
 
 @media (min-width: 768px) {
