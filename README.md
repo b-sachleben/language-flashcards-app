@@ -12,7 +12,7 @@ This is a Node.js project using MongoDb to persist data.  The intent of the proj
 To view this app, download the source files from Github and do the following:
 
 * Go to root directory of project
-* Run ‘npm install’ to install necessary packages
+* Run ‘npm install’ to install necessary packages (requires node and npm installed on local machine)
 * _Make sure there is an internet connection because, though it can be run by your local machine, the project is dependent on resources linked from the internet_
 * Run ‘npm start’ to begin the app server process
 * Open a browser window and navigate to `http://localhost:3000`
